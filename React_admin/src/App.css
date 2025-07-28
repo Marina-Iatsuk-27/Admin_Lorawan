@@ -1,0 +1,48 @@
+/* src/App.css */
+:root {
+  --primary: #2c3e50;
+  --secondary: #34495e;
+  --danger: #e74c3c;
+  --warning: #f39c12;
+  --success: #2ecc71;
+  --info: #3498db;
+  --light: #ecf0f1;
+  --dark: #7f8c8d;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f5f6fa;
+  color: #333;
+}
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  padding: 20px;
+  transition: all 0.3s;
+}
+
+.main-content.collapsed {
+  margin-left: 0;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 15px 10px;
+  }
+}
