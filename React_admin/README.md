@@ -19,3 +19,9 @@ npm install
 ```bash
 npm run dev
 ```
+
+Для начальной установки роута
+```bash
+npm install react-router-dom @types/react-router-dom
+```
+

@@ -1,45 +1,49 @@
 // src/App.js
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Sidebar from './components/Sidebar/Sidebar';
-import Dashboard from './components/Dashboard/Dashboard';
-import History from './components/History/History';
-import Reports from './components/Reports/Reports';
 import './App.css';
 
-function App() {
-  const [activePage, setActivePage] = useState('dashboard');
+// Ленивая загрузка компонентов
+const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
+const History = lazy(() => import('./components/History/History'));
+
+
+const AppContent = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const location = useLocation();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  const renderPage = () => {
-    switch (activePage) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'history':
-        return <History />;
-      case 'reports':
-        return <Reports />;
-      default:
-        return <Dashboard />;
-    }
-  };
-
   return (
     <div className="app">
       <Sidebar 
-        activePage={activePage} 
-        setActivePage={setActivePage}
+        currentPath={location.pathname}
         sidebarOpen={sidebarOpen}
         toggleSidebar={toggleSidebar}
       />
       <div className={`main-content ${sidebarOpen ? '' : 'collapsed'}`}>
-        {renderPage()}
+        <Suspense fallback={<div className="loading-spinner">Загрузка...</div>}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/history" element={<History />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </Suspense>
       </div>
     </div>
   );
-}
+};
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  );
+};
 
 export default App;
